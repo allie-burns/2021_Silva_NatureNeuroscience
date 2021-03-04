@@ -4,7 +4,7 @@
 ## Analysis of photometry data aligned to freezing information
 ##
 ## Input (should all be in directory set below):
-##  - Photometry Files (1_binPhot)
+##  - Photometry Files after Igor processing (1_binPhot)
 ##     - One file per mouse per phase (recall, extinction, SR, etc)
 ##     - previously binned using BinTimePoints.R script
 ##     - File contains time_ext, df_405, df_465 columns
