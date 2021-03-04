@@ -1,8 +1,8 @@
 #################################################################################
 ########################  Binning Raw Photometry data  ##########################
 ##
-## Average fiber raw photometry readings into 10ms time bins to reduce file sizes
-## for next steps in Igor
+## Align time points and average fiber raw photometry readings into 10ms time
+## bins to reduce file sizes for next steps in Igor
 ##
 ## Input (all files to process should be in same directory set by path)
 ##  - Raw Photometry files (0_rawPhot)
