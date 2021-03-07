@@ -26,4 +26,4 @@ For an example output of this script, see `image analysis > example data > cell 
 For an example output of this script, see `image analysis > example data > ratios in mPFC`. The file `WT48_results_mPFC_BLA.csv` contains the chance ratios (of animals in one example experiment WT48), and the directory `Raw_numbers_mPFC_BLA` contains the raw numbers with which the ratios were calculated.
    3. `QuPath.py`: Contains helper functions necessary for `CSV_reader.py`.
  
-![image analysis](./image_analysis.jpeg)
+![image analysis](./image_analysis.jpg)
