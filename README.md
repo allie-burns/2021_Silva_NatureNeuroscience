@@ -21,10 +21,10 @@ Code provided here was used to analyze the photometry data seen in Figure 3, Fig
 Code provided here was used to count the number of fluorescently labeled cells on microscopy images, and to convert these counts to the cFos+AAVr+/chance ratios presented in Figures 1d-i and Supplementary Figure 1c-f.
 
    1. `qps-multiChannels_PositiveCells_Analysis.groovy`: Perform co-localization analysis of AAV2r, cFos and Dapi positive cells. This script outputs one .csv file for each microscopy image, containing the number of Dapi+, Dapi+AAVr+, Dapi+cFos+, and Dapi+cFos+AAVr for each brain region on the image. To run this script, we used the QuPath v0.1.3 software (https://qupath.github.io/). 
-For an example output of this script, see `image analysis > example data > cell counts in mPFC`.
+For example output files of this script, see `image analysis > example data > cell counts in mPFC`.
 
    2. `CSV_reader.py`: Convert cell counts found with the `.groovy` script into cFos+AAVr+/chance ratios for each brain region. Ratios are averaged over all brain slices available for each animal. To run this script, we used Python 3.7. An additional requirement is Pandas, which you can install with the command `conda install pandas`.  
-For an example output of this script, see `image analysis > example data > ratios in mPFC`. The file `WT48_results_mPFC_BLA.csv` contains the chance ratios (of animals in one example experiment WT48), and the directory `Raw_numbers_mPFC_BLA` contains the raw numbers with which the ratios were calculated.
+For example output files of this script, see `image analysis > example data > ratios in mPFC`. The file `WT48_results_mPFC_BLA.csv` contains the chance ratios (of animals in one example experiment called WT48), and the directory `Raw_numbers_mPFC_BLA` contains the raw numbers with which the ratios were calculated.
 
    3. `QuPath.py`: Contains helper functions necessary for `CSV_reader.py`.
  
