@@ -1,18 +1,17 @@
 ################################################################################
 ########################  Photometry-Freezing Analysis  ########################
 ##
-## Analysis of photometry data aligned to freezing information
+##
 ##
 ## Input (should all be in directory set below):
-##  - Photometry Files
+##  - Photometry Files after Igor processing (IgorOutput)
 ##     - One file per mouse per phase (recall, extinction, SR, etc)
-##     - previously binned using BinTimePoints.R script
+##     - previously binned using BinTimePoints.R and processed using Igor pipeline
 ##     - File contains time_ext, df_405, df_465 columns
 ##     - File name should be:
 ##        - mouse_phase#_phaseName_binned_binningvalue_dF.txt
 ##        - EX: 10005_phase6_ext4_6_binned_0.01_dF.txt
-##     - If you want to analyse 405 traces files have to be in a folder called "photometry"
-##  - Freezing file
+##  - Freezing file (TSE_freezingOutput)
 ##     - One file represents many mice and many phases
 ##     - File output from TSE software
 ##     - File converted to tab delimited Txt on a windows computer(using TSE software)
@@ -21,23 +20,7 @@
 ##        - EX: freezing_photo95540_Ext3_Ext4_Ext5_Ext6_Ext7_cutoff0.5.txt
 ##
 ## Output:
-##  - HTML file of freezing mapped onto photometry data
-##    - One file per mouse per phase
-##    - File name: date_mouse_phase#_phaseName.html
-##  - PDF file of average photometry pattern at freezing exit
-##    - One file per mouse per phase
-##    - File name: date_mouse_phase#_phaseName.pdf
-##  - CSV file of photometry and freezing information
-##    - Oe file per mouse per phase
-##    - File name: date_mouse_phase#_phaseName_PhotFreezeTable.csv
-##    - File contains following columns:
-##       - time_ext : binned times from photometry files
-##       - df_405
-##       - df_465
-##       - freeze : boolean (0 = no freeze; 1 = freeze) (freezing = TSE cutoff (0.5s)
-##       - freeze_cut : boolean (as above) (freezing = minfreeze (set below))
-##  - CSV file of photo signal diringe each freezing window(freezing end+-2s) for freezings longer than minfreeze(normally set as 1.5s)
-## 
+##  - CSV file with freezing statistics for every freezing window by mouse, by phase
 ################################################################################
 
 #########################################################
@@ -49,13 +32,12 @@ library(plotrix)
 library(RColorBrewer)
 library(wesanderson)
 
-directory <- "../data/3_phot_freezing_analysis/"
-exp <- "photometry" ##basename(directory)
+directory <- "../data/Photometry_Output/"
 dir.create(paste(directory,"byMouse/",sep=''))
 setwd(directory)
 
 ## Build Comparison Info
-fls<- list.files("../1_binPhot/",pattern="^[0-9]")
+fls<- list.files("../Photometry_Input/Igor_output/",pattern="^[0-9]")
 comp <- data.frame(
     PHASE_NAME = unlist(tolower(lapply(fls, function(x) {strsplit(x,split="_")[[1]][[3]][[1]]}))),
     ANIMAL = unlist(lapply(fls, function(x) {strsplit(x,split="_")[[1]][[1]][[1]]})),
@@ -90,7 +72,8 @@ AverageMouse <- function(i,phases,comp){
         cat(paste(animal, "-", phasename, "-", ph, "\n", sep=" "))
         
         ## Load and process Freezing Data
-        freezeTable <-list.files("../2_freezeFiles",pattern="freez", full.names = TRUE)
+        freezeTable <-list.files("../Photometry_Input/TSE_freezingOutput",
+                                 pattern="freez", full.names = TRUE)
         freezeTable <- freezeTable[grep(phasename,freezeTable,ignore.case=TRUE)]
 
         rawFreeze <- do.call(rbind,
@@ -98,7 +81,10 @@ AverageMouse <- function(i,phases,comp){
                                  read.table(freezeTable,skip=3,dec=",")
                              }))
         columns <- read.table(freezeTable[1],
-                              nrow=1,skip=1,sep="\t",stringsAsFactors=FALSE,header=T,check.names=T)
+                              nrow=1,skip=1,sep="\t",
+                              stringsAsFactors=FALSE,
+                              header=T,check.names=T)
+        
         colnames(rawFreeze) <- colnames(columns)
         
         freeze <- rawFreeze[rawFreeze$Animal == animal,] ##filter by animal
@@ -118,7 +104,8 @@ AverageMouse <- function(i,phases,comp){
                                   post2 = freeze_cut$Time.to..s. + window)
         
         ## Load and process photometry data
-        photometryTable <- list.files("../1_binPhot/", pattern="binned", full.names = TRUE)
+        photometryTable <- list.files("../Photometry_Input/Igor_output",
+                                      pattern="binned", full.names = TRUE)
         photometryTable <- photometryTable[grep(phasename,photometryTable, ignore.case=TRUE)]
 
         photometryTable <- photometryTable[grep(animal,photometryTable)]

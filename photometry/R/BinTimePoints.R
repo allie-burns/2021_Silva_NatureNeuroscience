@@ -1,18 +1,18 @@
 #################################################################################
 ########################  Binning Raw Photometry data  ##########################
 ##
-## Align time points and average fiber raw photometry readings into 10ms time
-## bins to reduce file sizes for next steps in Igor
+## Align photometry times and average fiber raw photometry readings into 10ms
+## time bins to reduce file sizes for next steps in Igor.
 ##
 ## Input (all files to process should be in same directory set by path)
-##  - Raw Photometry files (0_rawPhot)
+##  - Raw Photometry Input (/data/RawPhotometry_Input/)
 ##    - Output from 1-site 2-color Fiber Photometry System (Doric Lenses, Canada)
 ##    - Columns include Time(s), 405nm and 465nM signal readings
 ##    - One file per mouse per phase (recall, extinction, SR, etc)
 ##    - Currently no rule for file names
 ##
 ## Output:
-## - New directory (1_binPhot/) with all new binned data
+## - New directory (/data/RawPhotometry_Input/binned_output/) with all new binned data
 ##   - Includes one output file per input file
 ##   - File names: InputFileName_binned.csv
 ##   - File includes:
@@ -29,12 +29,12 @@ library(readr)
 library(dplyr)
 
 ## Get file list from Folder
-path <- "../data/0_rawPhot"
+path <- "../data/RawPhotometry_Input"
 files <- list.files(path,full.names=TRUE)
 
 ## Set up file for saving (saving will occur wherever you run the script)
-if(!dir.exists(paste("../data/1_binPhot/",sep=""))) { 
-    dir.create(paste("../data/1_binPhot/",sep=""))
+if(!dir.exists(paste("../data/RawPhotometry_Input/binned_output",sep=""))) { 
+    dir.create(paste("../data/RawPhotometry_Input/binned_output",sep=""))
 }
 
 ######################################################
@@ -80,7 +80,10 @@ BinningByFile <- function(i,files) {
     ## Output CSV file
     fl <- substr(basename(filePath),1,nchar(basename(filePath)) -4)
     fl <- paste(fl,"binned.csv",sep="_")
-    write.csv(binFC, file=paste("./BinningOutput/",fl,sep=""), sep=',', row.names=FALSE)
+    write.csv(binFC,
+              file=paste("../data/RawPhotometry_Input/binned_output/",fl,sep=""),
+              sep=',',
+              row.names=FALSE)
     
 }
 

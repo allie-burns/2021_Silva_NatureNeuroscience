@@ -7,9 +7,10 @@ Fear and trauma generate some of the longest-lived memories. Despite the corresp
 ## Photometry Analysis
 Code provided here was used to analyze the photometry data seen in Figure 3, Figure 5, Extended data Figure 6, and Extended data Figure 10. Example files are included in the data folder to help clarify some of the input information for code usage.
 
-  1. `BinTimePoints.R`: Align time points and reduce raw output from fiber photometry apparatus into 10ms bins for downstream processing in Igor.
+  1. `BinTimePoints.R`: Align time points and reduce raw output from 1-site 2-color Fiber Photometry System (Doric Lenses, Canada) into 10ms bins for downstream processing in Igor.
   2. Igor processing: Low pass filter and dF/F calculation
-        - Delete first 600 points of waves to get rid of initial exponential decay
+        - Run Igor command order from /Igor/1.7 Hz filter_bsl Normalization on all.txt
+		- Delete first 600 points of waves to get rid of initial exponential decay
         - Low-pass filter at 1.7 Hz with Hanning (2.5 reject band)
         - Calculate  dF/Fo for 465 and 405 where Fo is median of the whole recording session (except the first 600 points)
         - Save files for further R analysis
