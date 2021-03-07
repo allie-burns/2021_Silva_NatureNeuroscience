@@ -29,12 +29,12 @@ library(wesanderson)
 library(writexl)
 
 ## Set up working directory
-directory <- "../data/3_phot_freezing_analysis/"
+directory <- "../data/Photometry_Output/"
 ##dir.create(paste(directory,"output_testing",sep=''))
 setwd(directory)
 
 ## Build Comparison Info
-fls <- list.files("../1_binPhot/", pattern="^[0-9]")
+fls <- list.files("../Photometry_Input/Igor_output", pattern="^[0-9]")
 comp <- data.frame(PHASE_NAME = unlist(
                        lapply(fls, function(x) {strsplit(x,split="_")[[1]][[3]][[1]]})
                    ),
@@ -62,7 +62,8 @@ CalciumPower <- function(i,comp) {
     ## STEP 1 : load and process data
     ## #########################################################
     ## Load and process photometry data
-    photometryTable <- list.files("../1_binPhot/", pattern="binned", full.names = TRUE)
+    photometryTable <- list.files("../Photometry_Input/Igor_output",
+                                  pattern="binned", full.names = TRUE)
     photometryTable <- photometryTable[grep(phasename,photometryTable, ignore.case=TRUE)]
     photometryTable <- photometryTable[grep(animal,photometryTable)]
     photometryTable <- photometryTable[grep(phase,photometryTable)]

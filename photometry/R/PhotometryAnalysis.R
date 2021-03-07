@@ -4,15 +4,14 @@
 ## Analysis of photometry data aligned to freezing information
 ##
 ## Input (should all be in directory set below):
-##  - Photometry Files after Igor processing (1_binPhot)
+##  - Photometry Files after Igor processing (IgorOutput)
 ##     - One file per mouse per phase (recall, extinction, SR, etc)
-##     - previously binned using BinTimePoints.R script
+##     - previously binned using BinTimePoints.R and processed using Igor pipeline
 ##     - File contains time_ext, df_405, df_465 columns
 ##     - File name should be:
 ##        - mouse_phase#_phaseName_binned_binningvalue_dF.txt
 ##        - EX: 10005_phase6_ext4_6_binned_0.01_dF.txt
-##     - If you want to analyse 405 traces files have to be in a folder called "photometry"
-##  - Freezing file (2_freezeFiles)
+##  - Freezing file (TSE_freezingOutput)
 ##     - One file represents many mice and many phases
 ##     - File output from TSE software
 ##     - File converted to tab delimited Txt on a windows computer(using TSE software)
@@ -29,14 +28,14 @@
 ##    - File name: date_mouse_phase#_phaseName.pdf
 ##  - CSV file of photometry and freezing information
 ##    - Oe file per mouse per phase
-##    - File name: date_mouse_phase#_phaseName_PhotFreezeTable.csv
+##    - File name: mouse_phase#_phaseName_PhotFreezeTable.csv
 ##    - File contains following columns:
 ##       - time_ext : binned times from photometry files
 ##       - df_405
 ##       - df_465
 ##       - freeze : boolean (0 = no freeze; 1 = freeze) (freezing = TSE cutoff (0.5s)
 ##       - freeze_cut : boolean (as above) (freezing = minfreeze (set below))
-##  - CSV file of photo signal diringe each freezing window(freezing end+-2s) for freezings longer than minfreeze(normally set as 1.5s)
+##  - CSV file of photo signal during each freezing window(freezing end+-2s) for freezings longer than minfreeze(normally set as 1.5s)
 ## 
 ################################################################################
 
@@ -55,15 +54,14 @@ library(scales)
 date <- gsub('-','',Sys.Date())
 ## Set location of files and where your output folder will be saved
 directory <- "../data/"
-exp <- "photometry"
 
 ## make output directory
-outDir <- paste(directory,"3_phot_freezing_analysis",sep="")
+outDir <- paste(directory,"Photometry_Output",sep="")
 if(!dir.exists(outDir)) { dir.create(outDir) }
 setwd(outDir)
 
 ## Build Comparison Info
-fls <- list.files("../1_binPhot/",
+fls <- list.files("../Photometry_Input/Igor_output/",
                   pattern="^[0-9]",
                   include.dirs=FALSE)
 
@@ -105,7 +103,7 @@ CalciumPatterns <- function(i,comp) {
     cat(paste("Start Analysis for :", animal,"-", phasename,'\n',sep=' '))
     
     ## Load and process Freezing Data
-    freezeTable <-list.files("../2_freezeFiles",pattern="freez", full.names = TRUE)
+    freezeTable <-list.files("../Photometry_Input/TSE_freezingOutput",pattern="freez", full.names = TRUE)
     freezeTable <- freezeTable[grep(phasename,freezeTable,ignore.case=TRUE)]
 
     rawFreeze <- do.call(rbind,
@@ -134,7 +132,7 @@ CalciumPatterns <- function(i,comp) {
                               post2 = freeze_cut$Time.to..s. + window)
     
     ## Load and process photometry data
-    photometryTable <- list.files("../1_binPhot/", pattern="binned", full.names = TRUE)
+    photometryTable <- list.files("../Photometry_Input/Igor_output/", pattern="binned", full.names = TRUE)
     photometryTable <- photometryTable[grep(phasename,photometryTable, ignore.case=TRUE)]
 
     photometryTable <- photometryTable[grep(animal,photometryTable)] ##error if no matching file name
@@ -178,7 +176,7 @@ CalciumPatterns <- function(i,comp) {
         photWindows <- photWindows[unlist(lapply(photWindows,function(x) {length(x) == 401}))]##for different binnings not 401
         photWindows <- do.call(cbind,photWindows)
         
-        if( exp == "photometry" ) {
+        ##if( exp == "photometry" ) {
         get405Windows <- function(i){
             start <- freezeRange[i,]$pre2
             end <- freezeRange[i,]$post2
@@ -188,8 +186,8 @@ CalciumPatterns <- function(i,comp) {
         Windows405 <- lapply(seq(1:nrow(freezeRange)),get405Windows)
         Windows405 <- Windows405[unlist(lapply(Windows405,function(x) {length(x) == 401}))]
         Windows405 <- do.call(cbind,Windows405)
-        }
-        
+    
+    
         ## Get time points for middle of freezing bouts
         MiddleFreezing <- function(i,freeze) {
             dur <- freeze[i,]$Dur...s.
@@ -214,7 +212,7 @@ CalciumPatterns <- function(i,comp) {
         
         write.csv(freezingStats,
                   paste('./',animal,'_',phase,'_',phasename,'_freezetrace_dF465.csv',sep=''))
-
+        
         ## Rearrange table for plotting
         meltPhot <- melt(freezingStats,id="seconds")
         meltPhot$col <- "cadetblue"
@@ -223,73 +221,73 @@ CalciumPatterns <- function(i,comp) {
         meltPhot$alpha[meltPhot$variable == "average"] <- '1'
         
         ## Output table of freezing stats (for sanity check)
-        if(exp == "photometry") {
-            Stats405 <- data.frame(seconds = seq(-window,window, length.out = nrow(Windows405)),
-                                   Windows405,
-                                   average = apply(Windows405,1,mean),
-                                   SE = apply(Windows405,1,std.error))
-            write.csv(freezingStats,
-                      paste('./',animal,'_',phase,'_',phasename,'_freezetrace_dF405.csv',sep=''))
-        }
+        Stats405 <- data.frame(seconds = seq(-window,window, length.out = nrow(Windows405)),
+                               Windows405,
+                               average = apply(Windows405,1,mean),
+                               SE = apply(Windows405,1,std.error))
+        write.csv(freezingStats,
+                  paste('./',animal,'_',phase,'_',phasename,'_freezetrace_dF405.csv',sep=''))
+    }
+    
+    ## Plot all traces on top of eachother
+    trace <- ggplot(meltPhot, aes(x=seconds,y=value,group=variable)) +
+        geom_line(data=subset(meltPhot,variable %in% "average"),color="black",alpha=1)+
+        geom_line(data=subset(meltPhot, variable %in% c(as.character(unique(meltPhot$variable[grep("X",meltPhot$variable)])))),color="cadetblue",alpha=0.5) + 
+        scale_fill_manual("",values="blue") +
+        scale_y_continuous(limits = c(-10, 10)) +
+        labs(title = paste("Average dF_465 value for",
+                           animal,
+                           "during", phasename, "(", phase, ") at the end of freezing", sep=" "),
+             y = "Average dF_465 value",
+             x = "End of freezing - Time (s)") +
+        theme(plot.title = element_text(size=12, face="bold"),
+              legend.position = 'none') +
+        annotate("text", hjust=0,x=-2,y = 10,##y= max(freezingStats) + 1,
+                 label= paste("n =",ncol(photWindows),"\n",
+                              minfreeze, " < Freezing Cutoff < ",maxfreeze,sep=" "))
+    
+    ## Plot traces surrounding freezing as averaged with ribbon plot
+    avTrace <- ggplot(data = freezingStats, aes (x = seconds, y = average)) +
+        geom_line() +
+        geom_ribbon(data = freezingStats,
+                    aes(ymin = average - SE, ymax = average + SE, fill = "band"), alpha = 0.3) +
+        scale_fill_manual("",values="blue") +
+        geom_line(data=Stats405, aes(x = seconds, y = average)) +
+        geom_ribbon(data=Stats405,
+                    aes(ymin=average - SE, ymax = average + SE,fill = "band"), alpha = 0.3) +
+        scale_y_continuous(limits = c(-10, 10)) +
+        labs(title = paste("Average dF_465 value for",
+                           animal,
+                           "during", phasename, "(", phase, ") at the end of freezing", sep=" "),
+             y = "Average dF_465 value",
+             x = "End of freezing - Time (s)") +
+        theme(plot.title = element_text(size=12, face="bold"),
+              legend.position = 'none') +
+        annotate("text", hjust=0,x=-2, y = 10,
+                 ##y= max(freezingStats$average) + max(freezingStats$SE),
+                 label= paste("n =",ncol(photWindows),"\n",
+                              minfreeze, " < Freezing Cutoff < ",maxfreeze,sep=" "))
 
-        ## Plot all traces on top of eachother
-        trace <- ggplot(meltPhot, aes(x=seconds,y=value,group=variable)) +
-            geom_line(data=subset(meltPhot,variable %in% "average"),color="black",alpha=1)+
-            geom_line(data=subset(meltPhot, variable %in% c(as.character(unique(meltPhot$variable[grep("X",meltPhot$variable)])))),color="cadetblue",alpha=0.5) + 
-            scale_fill_manual("",values="blue") +
-            scale_y_continuous(limits = c(-8, 5)) +
-            labs(title = paste("Average dF_465 value for",
-                               animal,
-                               "during", phasename, "(", phase, ") at the end of freezing", sep=" "),
-                 y = "Average dF_465 value",
-                 x = "End of freezing - Time (s)") +
-            theme(plot.title = element_text(size=12, face="bold"),
-                  legend.position = 'none') +
-            annotate("text", hjust=0,x=-2,y = 3,##y= max(freezingStats) + 1,
-                     label= paste("n =",ncol(photWindows),"\n",
-                                  minfreeze, " < Freezing Cutoff < ",maxfreeze,sep=" "))
-        
-        ## Plot traces surrounding freezing as averaged with ribbon plot
-        avTrace <- ggplot(data = freezingStats, aes (x = seconds, y = average)) +
-            geom_line() +
-            geom_ribbon(data = freezingStats,
-                        aes(ymin = average - SE, ymax = average + SE, fill = "band"), alpha = 0.3) +
-            scale_fill_manual("",values="blue") +
-            geom_line(data=Stats405, aes(x = seconds, y = average)) +
-            geom_ribbon(data=Stats405,
-                        aes(ymin=average - SE, ymax = average + SE,fill = "band"), alpha = 0.3) +
-            scale_y_continuous(limits = c(-3, 8)) +
-            labs(title = paste("Average dF_465 value for",
-                               animal,
-                               "during", phasename, "(", phase, ") at the end of freezing", sep=" "),
-                 y = "Average dF_465 value",
-                 x = "End of freezing - Time (s)") +
-            theme(plot.title = element_text(size=12, face="bold"),
-                  legend.position = 'none') +
-            annotate("text", hjust=0,x=-2, y = 3,
-                     ##y= max(freezingStats$average) + max(freezingStats$SE),
-                     label= paste("n =",ncol(photWindows),"\n",
-                                  minfreeze, " < Freezing Cutoff < ",maxfreeze,sep=" "))
-        ## Save trace files
-        pdf(file   = paste('./',animal,'_',phase,'_',phasename,'_tracingFreezeEnd.pdf',sep=''),
-            width  = 15,
-            height = 7)
-        plot(midTime$dur,midTime$dF_465,
-             col=midTime$color, pch=16,
-             ylab = "dF_465 at Middle of Freezing",
-             xlab = "Duration time for freezing (s)",
-             main = paste("Calcium levels at the middle of freezing by duration of freezing \n",
-                          animal, "-", phasename))
-        abline(lm(data=midTime,formula = dF_465 ~ dur))
-        text(max(midTime$dur) - 1,
-             max(midTime$dF_465) -1,
-             paste("P.value = ",
-                   scientific(summary(lm(data=midTime,formula = dF_465 ~ dur))$coefficients[8],digits=2),
-                   "\n", minfreeze, " < Freezing Cutoff < ",maxfreeze,
-                   sep=''))
-        grid.arrange(avTrace,trace,ncol=2)
-        ##dev.off()
-
+    ## Save trace files
+    pdf(file   = paste('./',animal,'_',phase,'_',phasename,'_tracingFreezeEnd.pdf',sep=''),
+        width  = 15,
+        height = 7)
+    plot(midTime$dur,midTime$dF_465,
+         col=midTime$color, pch=16,
+         ylab = "dF_465 at Middle of Freezing",
+         xlab = "Duration time for freezing (s)",
+         main = paste("Calcium levels at the middle of freezing by duration of freezing \n",
+                      animal, "-", phasename))
+    abline(lm(data=midTime,formula = dF_465 ~ dur))
+    text(max(midTime$dur) - 1,
+         max(midTime$dF_465) -1,
+         paste("P.value = ",
+               scientific(summary(lm(data=midTime,formula = dF_465 ~ dur))$coefficients[8],digits=2),
+               "\n", minfreeze, " < Freezing Cutoff < ",maxfreeze,
+               sep=''))
+    grid.arrange(avTrace,trace,ncol=2)
+    ##dev.off()
+    
     ## } else {
     ##     pdf(file   = paste(outDir,'/',animal,'_',phase,'_',phasename,'_tracingFreezeEnd.pdf',sep=''),height=7,width=7)
     ##     ggplot() +
