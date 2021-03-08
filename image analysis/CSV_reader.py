@@ -44,10 +44,10 @@ region_name = 'mPFC'     # Is only used in the title of the output file. Choose 
 tracer = 'BLA'           # 'BLA' or 'NRe'
 
 # where are the .csv files stored?
-root = '/Users/lukasvandenheuvel/Documents/GRAFF Lab/2021_Silva_NatureNeuroscience/image analysis/example data/cell counts in mPFC'
+root = './example data/cell counts in mPFC'
 
 # Path and name of the directory where you want to output. If it is a path to a folder that doesn't exist yet, it will be created automatically.
-output_directory = '/Users/lukasvandenheuvel/Documents/GRAFF Lab/2021_Silva_NatureNeuroscience/image analysis/example data/ratios in mPFC' 
+output_directory = './example data/ratios in mPFC' 
 
 # which mice are in which groups?
 recall = []
