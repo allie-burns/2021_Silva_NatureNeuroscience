@@ -37,4 +37,5 @@ For example output files of this script, see `image analysis > example data > ra
    3. `QuPath.py`: Contains helper functions necessary for `CSV_reader.py`.
  
 Overview of image analysis procedure: 
+
 ![image analysis](./Image_analysis.png)
