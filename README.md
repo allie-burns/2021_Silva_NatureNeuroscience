@@ -1,4 +1,5 @@
 # Silva et al., Nature Neuroscience, 2021 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4588295.svg)](https://doi.org/10.5281/zenodo.4588295)
 Code used to perform the analysis presented in *A thalamo-amygdalar circuit underlying the extinction of remote fear memories* (Silva et al., Nature Neuroscience, 2021).
 
 ## Abstract
