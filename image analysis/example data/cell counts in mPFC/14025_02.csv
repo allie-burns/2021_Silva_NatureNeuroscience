@@ -1,0 +1,21 @@
+Name,Class,Parent,ROI,Centroid X µm,Centroid Y µm,Num Annotations,Num Detections,Num A,Num ABC,Num AC,Num C,Num N,Area um^2,Perimeter µm,Max length µm
+PL23 left,mPFC,Image,Polygon,3056.9,1636.6,0,347,75,0,6,3,263,88672.3,1905.2,889.84
+PL5 left,mPFC,Image,Polygon,2856.6,1720.3,0,852,274,3,5,10,560,208857.1,2021.9,825.73
+PL6 left,mPFC,Image,Polygon,2530.5,1862.1,0,673,148,3,0,0,511,134593.7,1586.9,622.13
+AC23 left,mPFC,Image,Polygon,2967.5,1013.9,0,183,46,5,3,4,125,51265.8,NaN,507.02
+AC5 left,mPFC,Image,Polygon,2807.2,1209.6,0,554,132,1,6,7,408,127481.8,1553.9,670.87
+AC6 left,mPFC,Image,Polygon,2503.8,1585.1,0,367,49,2,0,3,312,71705.5,1539.4,724.5
+IL23 right,mPFC,Image,Polygon,3331.4,2466.4,0,344,73,0,6,4,261,79938.5,NaN,842.52
+IL5 right,mPFC,Image,Polygon,3519.1,2458.3,0,1022,297,4,23,13,685,229509,2210.8,880.06
+IL6 right,mPFC,Image,Polygon,3849.1,2465,0,1550,356,0,0,0,1180,307578.7,2412.1,932.45
+PL5 right,mPFC,Image,Polygon,3556.5,1727.7,0,849,298,15,9,4,523,205301.3,2009,836.88
+PL6 right,mPFC,Image,Polygon,3887.9,1893.7,0,617,168,7,0,0,432,134536,1615.8,632.9
+AC5 right,mPFC,Image,Polygon,3626.5,1237.1,0,535,164,9,14,6,342,125627.1,1545.5,669.87
+AC6 right,mPFC,Image,Polygon,3923.6,1633.5,0,355,117,0,0,2,237,79438,1631,761.22
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,, ,,,

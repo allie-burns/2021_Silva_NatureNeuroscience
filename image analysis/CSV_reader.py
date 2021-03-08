@@ -7,7 +7,7 @@ Created on Sat May  9 15:45:15 2020
 
 This script calculates 
 (1) the ratio of cFos positive cells, 
-(2) the ratio of cFos- and tracer- positive (double positive) cells, and 
+(2) the ratio of cFos and tracer positive (double positive) cells, and 
 (3) the ratio of double-positive cells normalized by chance, 
 for specified brain regions in analyzed microscopy slices.
 
@@ -39,22 +39,25 @@ from QuPath import import_files, calculate_ratio, get_chance_ratio, write_result
 '''----------------------------PARAMETERS THAT YOU HAVE TO SET----------------------------'''
 
 # specifications
-experiment = 'WT47'      # Experiment name.
-region_name = 'INS'      # Is only used in the title of the output file. Choose whatever you like.
+experiment = 'WT48'      # Experiment name.
+region_name = 'mPFC'     # Is only used in the title of the output file. Choose whatever you like.
 tracer = 'BLA'           # 'BLA' or 'NRe'
 
 # where are the .csv files stored?
-root = '/Users/lukasvdh/Documents/GRAFF/WT47_retro_recent Lukas/low exposure/INS_BLA checked'
+root = '/Users/lukasvandenheuvel/Documents/GRAFF Lab/2021_Silva_NatureNeuroscience/image analysis/example data/cell counts in mPFC'
 
 # Path and name of the directory where you want to output. If it is a path to a folder that doesn't exist yet, it will be created automatically.
-output_directory = '/Users/lukasvdh/Documents/GRAFF/WT47_retro_recent Lukas/low exposure/WT47 results INS_BLA' 
+output_directory = '/Users/lukasvandenheuvel/Documents/GRAFF Lab/2021_Silva_NatureNeuroscience/image analysis/example data/ratios in mPFC' 
 
 # which mice are in which groups?
 recall = []
-#extinction = ['14031', '14032', '14033', '14034', '14035', '14036']
-#control = ['14025', '14026', '14027', '14028', '14029', '14030']
-extinction = ['12852', '12853', '12854', '12855']
-control = ['12854(50)', '12851', '12857', '12858']
+# WT48
+extinction = ['14031', '14032', '14033', '14034', '14035', '14036']
+control = ['14025', '14026', '14027', '14028', '14029', '14030']
+
+# WT47
+#extinction = ['12852', '12853', '12854', '12855']
+#control = ['12854(50)', '12851', '12857', '12858']
 
 # What are the whole regions and subregions? Keys are whole regions, values are lists of subregions.
 # Example:
@@ -145,8 +148,8 @@ combine = {'VTA': ['VTA'],
            'PIF': ['PIF']
         }
 '''
-'''
-# Prefrontal cortex
+
+# mPFC
 combine = {'IL': ['IL23', 'IL5', 'IL6'],
            'PL': ['PL23', 'PL5', 'PL6'],
            'AC': ['AC23', 'AC5', 'AC6'],
@@ -157,6 +160,7 @@ combine = {'GI': ['GI'],
            'DI': ['DI'],
            'AI': ['AI']
           }
+'''
 
 #%%
 '''-------------------------------START CODE------------------------------------'''
