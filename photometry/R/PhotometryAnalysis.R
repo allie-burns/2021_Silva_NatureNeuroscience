@@ -40,7 +40,7 @@
 ################################################################################
 
 #########################################################
-## STEP 1 : set parameters
+## Set parameters
 #########################################################
 ## Loading Libraries
 library(plotly)
@@ -90,7 +90,7 @@ maxfreeze <- Inf ## set maximum freezing length
 window <- 2      ## set  window around end of freezing
 
 ###################################
-## Run code
+## Run code in function
 ###################################
 CalciumPatterns <- function(i,comp) {
 

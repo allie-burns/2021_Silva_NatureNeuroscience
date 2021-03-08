@@ -25,7 +25,7 @@
 ################################################################################
 
 #########################################################
-## STEP 1 : set parameters
+## Set parameters
 #########################################################
 ## Loading Libraries
 library(plotly)
@@ -64,7 +64,7 @@ AverageMouse <- function(i,phases,comp){
     
     traceData <-  function(j,myphase) {
         ## ###############################################
-        ## A. Set Data parameters and load a process
+        ## Set Data parameters and load a process
         ## ###############################################
         phasename <- myphase$PHASE_NAME[j]
         animal <- myphase$ANIMAL[j]
