@@ -9,7 +9,7 @@ Code provided here was used to analyze the photometry data seen in Figure 3, Fig
 
   1. `BinTimePoints.R`: Align time points and reduce raw output from 1-site 2-color Fiber Photometry System (Doric Lenses, Canada) into 10ms bins for downstream processing in Igor.
   2. Igor processing: Low pass filter and dF/F calculation
-        - Run Igor command order from /Igor/1.7 Hz filter_bsl Normalization on all.txt
+        - Run Igor command order from `/Igor/1.7 Hz filter_bsl Normalization on all.txt`
 		- Delete first 600 points of waves to get rid of initial exponential decay
         - Low-pass filter at 1.7 Hz with Hanning (2.5 reject band)
         - Calculate  dF/Fo for 465 and 405 where Fo is median of the whole recording session (except the first 600 points)
@@ -19,7 +19,7 @@ Code provided here was used to analyze the photometry data seen in Figure 3, Fig
 		- Align photometry (dF/Fo from Igor) and freezing data (raw data from TSE freezing detection software)
 		- Plot overlay of photometry and freezing data for full duration of experiment
 		- Plot average photometry output for 2 seconds surrounding the end of freezing bouts
-	 - `PhotometryAnalysis_byMouse.R`: Calculate the average freezing statistics for each animal in each phase
+	 - `PhotometryAnalysis_byMouse.R`:  Calculate the photometry patterns during freezing for each animal in each phase
 	 - `PhotometryIntegralAnalysis.R`: Calculate signal power for photometry output	 
 
 ## Image Analysis

@@ -1,7 +1,7 @@
 ################################################################################
 ########################  Photometry-Freezing Analysis  ########################
 ##
-##
+## Calculate the photometry patterns during freezing for each animal in each phase
 ##
 ## Input (should all be in directory set below):
 ##  - Photometry Files after Igor processing (IgorOutput)
@@ -20,7 +20,8 @@
 ##        - EX: freezing_photo95540_Ext3_Ext4_Ext5_Ext6_Ext7_cutoff0.5.txt
 ##
 ## Output:
-##  - CSV file with freezing statistics for every freezing window by mouse, by phase
+##  - CSV file with photometry readings for every freezing window by mouse, by phase
+##
 ################################################################################
 
 #########################################################

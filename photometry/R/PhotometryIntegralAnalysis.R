@@ -14,7 +14,7 @@
 ##     - If you want to analyse 405 traces files have to be in a folder called "photometry"
 ##
 ## Output:
-##  - XLSX file that lists each file in directory and the power analysis
+##  - XLSX file that lists each file in directory and the power analysis for the data in that file
 ##    - one file for full directory
 ##    - File name: IntegralAnalysis.xlsx
 ## 
