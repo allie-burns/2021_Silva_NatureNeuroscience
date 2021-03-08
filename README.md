@@ -7,20 +7,23 @@ Fear and trauma generate some of the longest-lived memories. Despite the corresp
 ## Photometry Analysis
 Code provided here was used to analyze the photometry data seen in Figure 3, Figure 5, Extended data Figure 6, and Extended data Figure 10. Example files are included in the data folder to help clarify some of the input information for code usage.
 
-  1. `BinTimePoints.R`: Align time points and reduce raw output from 1-site 2-color Fiber Photometry System (Doric Lenses, Canada) into 10ms bins for downstream processing in Igor.
+  1. `BinTimePoints.R`: Align time points and reduce raw output from 1-site 2-color Fiber Photometry System (Doric Lenses, Canada) into 10ms bins for downstream processing in Igor. Example input file in `photometry/data/RawPhotometry_Input/14586_Ext3_phase9_1.csv` and example output file in `photometry/data/RawPhotometry_Input/binned_output`
   2. Igor processing: Low pass filter and dF/F calculation
         - Run Igor command order from `/Igor/1.7 Hz filter_bsl Normalization on all.txt`
 		- Delete first 600 points of waves to get rid of initial exponential decay
         - Low-pass filter at 1.7 Hz with Hanning (2.5 reject band)
         - Calculate  dF/Fo for 465 and 405 where Fo is median of the whole recording session (except the first 600 points)
         - Save files for further R analysis
+		- Example output files in `photometry/data/Photometry_Input/Igor_output`
   4. Photometry Analysis
+	 - Example photometry input files for these analysis can be found in `photometry/data/Photometry_Input/Igor_output` and  example freezing files can be found in `photometry/data/Photometry_Input/TSE_freezingOutput`
 	 - `PhotometryAnalysis.R`:  Run full photometry analysis for each photometry file.
 		- Align photometry (dF/Fo from Igor) and freezing data (raw data from TSE freezing detection software)
 		- Plot overlay of photometry and freezing data for full duration of experiment
 		- Plot average photometry output for 2 seconds surrounding the end of freezing bouts
-	 - `PhotometryAnalysis_byMouse.R`:  Calculate the photometry patterns during freezing for each animal in each phase
-	 - `PhotometryIntegralAnalysis.R`: Calculate signal power for photometry output	 
+		- Example output files in `/photometry/data/Photometry_Output/`
+	 - `PhotometryAnalysis_byMouse.R`:  Calculate the photometry patterns during freezing for each animal in each phase. Example output files in `/photometry/data/Photometry_Output/byMouse`
+	 - `PhotometryIntegralAnalysis.R`: Calculate signal power for photometry output. Example output in `/photometry/data/Photometry_Output/IntegralAnalysis.xlsx`
 
 ## Image Analysis
 Code provided here was used to count the number of fluorescently labeled cells on microscopy images, and to convert these counts to the cFos+AAVr+/chance ratios presented in Figures 1d-i and Extended data Figure 1, 2, 8, 9.
